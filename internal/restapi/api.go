@@ -11,6 +11,7 @@ import (
 type RESTAPI struct {
 	attemptsSinceFail int
 	attemptsSincePass int
+	running           bool
 }
 
 // New returns a new instance of the RESTAPI giving access to the CRUD
@@ -22,6 +23,7 @@ func New() *RESTAPI {
 // Start starts up the RESTAPI to be consumed
 func (api *RESTAPI) Start() {
 	router := mux.NewRouter()
+	api.running = true
 	router.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "Hello, from the circuit")
 	}).Methods("GET")
