@@ -1,6 +1,7 @@
 package client
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -18,11 +19,14 @@ func New(url string) *Client {
 }
 
 // Request sends a GET request to recieve data from the Client's url
-func (c *Client) Request() {
+func (c *Client) Request() error {
 	resp, err := http.Get(c.url)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	fmt.Println(resp)
-
+	if resp.StatusCode != 200 {
+		return errors.New("Didnt work")
+	}
+	return nil
 }

@@ -15,7 +15,7 @@ func (api *RESTAPI) GetData(w http.ResponseWriter, r *http.Request) {
 	if api.attemptsSinceFail >= 10 {
 		api.running = false
 		api.attemptsSincePass++
-		if api.attemptsSincePass >= 13 {
+		if api.attemptsSincePass >= 7 {
 			backUp := checkForRecovery()
 			if backUp {
 				api.running = true
