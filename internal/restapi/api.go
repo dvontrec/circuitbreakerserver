@@ -9,6 +9,7 @@ import (
 
 // RESTAPI allws exported api functionality
 type RESTAPI struct {
+	attemptsSinceFail int
 	attemptsSincePass int
 }
 
@@ -23,6 +24,7 @@ func (api *RESTAPI) Start() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "Hello, from the circuit")
-	})
+	}).Methods("GET")
+	router.HandleFunc("/circuit", api.GetData).Methods("GET")
 	http.ListenAndServe(":8109", router)
 }
