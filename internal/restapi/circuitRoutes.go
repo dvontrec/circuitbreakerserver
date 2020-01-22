@@ -12,12 +12,14 @@ func (api *RESTAPI) GetData(w http.ResponseWriter, r *http.Request) {
 	if api.attemptsSincePass == 0 {
 		api.attemptsSinceFail++
 	}
-	if api.attemptsSinceFail >= 10 {
+	if api.attemptsSinceFail >= 30 {
 		api.running = false
 		api.attemptsSincePass++
-		if api.attemptsSincePass >= 7 {
+		fmt.Println("Server Closed")
+		if api.attemptsSincePass >= 21 {
 			backUp := checkForRecovery()
 			if backUp {
+				fmt.Println("Server Opened")
 				api.running = true
 				api.attemptsSinceFail = 0
 				api.attemptsSincePass = 0
@@ -26,7 +28,7 @@ func (api *RESTAPI) GetData(w http.ResponseWriter, r *http.Request) {
 	}
 	response := fmt.Sprintf("Server running: %v\nattempts passed = %d\nattempts failed = %d", api.running, api.attemptsSinceFail, api.attemptsSincePass)
 	if !api.running {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 	fmt.Fprintf(w, response)
 }

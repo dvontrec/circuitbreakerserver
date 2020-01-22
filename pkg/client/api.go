@@ -28,5 +28,6 @@ func (c *Client) Request() error {
 	if resp.StatusCode != 200 {
 		return errors.New("Didnt work")
 	}
+	defer resp.Body.Close()
 	return nil
 }
