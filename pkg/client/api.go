@@ -1,10 +1,16 @@
 package client
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 )
+
+type response struct {
+	Message string `json:"message"`
+	Name    string `json:"name"`
+}
 
 // Client gives access to client request functionality
 type Client struct {
@@ -24,7 +30,11 @@ func (c *Client) Request() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(resp)
+	var res response
+	if err = json.NewDecoder(resp.Body).Decode(&res); err != nil {
+		return err
+	}
+	fmt.Printf("*****************\n%+v\n", res)
 	if resp.StatusCode != 200 {
 		return errors.New("Didnt work")
 	}
